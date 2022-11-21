@@ -251,7 +251,7 @@ function addCellEvents(key, cell) {
     if ( revealedBombKey )
       return
     
-    faceElement.innerText = '🤨'
+    faceElement.innerText = '🤨';
     if ( !clickTimer )
       return
     
@@ -265,7 +265,8 @@ function addCellEvents(key, cell) {
   cell.onpointerup = onClickEnd
   cell.onpointerleave = (e) => {
     clearTimeout(clickTimer);
-    clickTimer = null
+    clickTimer = null;
+    faceElement.innerText = '🤨';
   }
   cell.oncontextmenu = (e) => {
     e.preventDefault();
