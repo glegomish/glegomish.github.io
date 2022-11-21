@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Привет Саперы!</title>
+    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Courier New', Courier, monospace;
+      }
+      body{
+        background-color: #EEE;
+        user-select: none;
+        -webkit-user-select: none; /* Safari */
+        -ms-user-select: none; /* IE 10+ */
+        
+        
+        --shadow-size: 3px;
+        padding: 0 2vw;
+      }
+
+      #game {
+        font-weight: bolder;
+        margin: 3rem auto;
+
+        /* width: calc(var(--cols-num) * (var(--cell-size) + var(--cell-margin) * 2)); */
+
+        /* border: 5px outset #E7E7E7; */
+        /* padding: 3px; */
+
+        background-color: #EEE;
+
+
+        /* width: clamp(var(--cols-num) * 20px, 100%, var(--cols-num) * 50px); */
+        
+        min-width: calc(var(--cols-num) * 20px);
+        width: 100%;
+        max-width: calc(var(--cols-num) * 50px);
+      }
+      
+      #header{
+        display: flex;
+        width: 100%;
+        /* background: #EEE; */
+        /* border: 5px inset #E7E7E7; */
+
+        font-size: 30px;
+        padding: 0.6rem 0;
+      }
+      
+      #bombsLeft {
+        width: 20%;
+        text-align: center;
+      }
+      #face {
+        width: 60%;
+        text-align: center;
+        cursor: pointer;
+      }
+      #timer {
+        width: 20%;
+        text-align: center;
+      }
+
+      #restart{
+        height: 50px;
+        padding: 0 2rem;
+        font-size: 20px;
+        display: block;
+      }
+      
+      button{
+        /* border: 5px outset #E7E7E7; */
+        border: 0 none;
+        
+        box-shadow: 
+          var(--shadow-size) var(--shadow-size) var(--shadow-size) 0 rgba(0,0,0,0.1),
+          calc(var(--shadow-size) * -1) calc(var(--shadow-size) * -1) var(--shadow-size) 0px rgba(255,255,255,0.5);
+        
+        background: #EEE;
+        
+        cursor: pointer;
+        transition: box-shadow 0.2s ease-out;
+
+        border-radius: 1rem;
+      }
+      button:not([disabled]):hover{
+        /* background-color: #DDD; */
+        
+        --shadow-size: 2px;
+      }
+      button:not([disabled]):active{
+        border: 2px solid #EEE;
+        box-shadow: 
+          1px 1px 1px 0 rgba(0,0,0,0.05),
+          -1px -1px 1px 0px rgba(255,255,255,0.3),
+          inset 2px 2px 2px 0 rgba(0,0,0,0.05),
+          inset -2px -2px 2px 0px rgba(255,255,255,0.3);
+      }
+      button[disabled] {
+        background-color: transparent;
+        box-shadow: none;
+        cursor: auto;
+      }
+
+
+      #field{
+        width: 100%;
+        margin-bottom: 2rem;
+
+        /* border: 5px outset #E7E7E7; */
+        /* padding: 3px; */
+        background-color: #EEE;
+        user-select: none;
+
+        display: grid;
+        grid-template-columns: repeat(var(--cols-num), minmax(0, 1fr));
+
+        gap: 5px;
+      }
+      #field button {
+        font-weight: bolder;
+        margin: 2%;
+        font-size: 1rem;
+        overflow: hidden;
+        
+        border-radius: 40%;
+        aspect-ratio: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <div id="header">
+        <div id="bombsLeft"></div>
+        <div id="face" onclick="startGame()"></div>
+        <div id="timer"></div>
+      </div>
+
+      <div id="field"></div>
+
+      
+      <div align="center" style="margin-top: 1rem;">
+        <button id="restart" onClick="startGame()">Restart</button>
+      </div>
+    </div>
+
+    <script src="minesweeper.js"></script>
+    
+  </body>
+</html>
