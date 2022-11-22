@@ -1,6 +1,5 @@
 const ROWS = 30
 const COLS = 30
-const PIXEL_SIZE = 15
 
 const canvas = document.getElementById("canvas")
 const gameOverAlert = document.getElementById("gameOver")
@@ -12,6 +11,8 @@ let gameInterval
 let foodKey
 let score 
 let speed
+let boostSpeed = false
+let boostTimeout = null
 let directionQueue
 let currentDirection
 
@@ -38,7 +39,6 @@ function clearPixels() {
 
 function initializeCanvas() {
   pixels = new Map()
-  document.body.style.setProperty('--pixel-size', PIXEL_SIZE + 'px')
   document.body.style.setProperty('--rows-num', ROWS)
   document.body.style.setProperty('--cols-num', COLS)
   
@@ -88,7 +88,7 @@ function addScore() {
   else{
     score += 15
   }
-
+  
   if ( speed > 10 )
     speed *= 0.9
 
@@ -140,7 +140,7 @@ function step() {
 }
 
 function next(){
-  gameInterval = setTimeout(step, speed)
+  gameInterval = setTimeout(step, boostSpeed ? 20 : speed)
 }
 
 function start() {
@@ -158,6 +158,7 @@ function start() {
   directionQueue = []
   gameOverAlert.style.display = 'none'
   speed = 100
+  boostSpeed = false
 
   snake = [
     toKey([0,0]),
@@ -180,8 +181,11 @@ gameOverAlert.onclick = (e) => {
     start()
 }
 
-// управление
+// управление с клавиатуры
 document.onkeydown = (e) => {
+  if ( boostTimeout )
+    clearTimeout(boostTimeout)
+  
   switch (e.key){
     case 'ArrowUp':
     case 'w':
@@ -193,7 +197,7 @@ document.onkeydown = (e) => {
       break;
     case 'ArrowRight':
     case 'd':
-      directionQueue.push([1,-0])
+      directionQueue.push([1,0])
       break;
     case 'ArrowLeft':
     case 'a':
@@ -202,8 +206,56 @@ document.onkeydown = (e) => {
     case 'R':
     case 'r':
       start()
-      break;
+      return
+      // break;
   }
+
+  boostSpeed = true
+}
+
+document.onkeyup = (e) => {
+  if ( boostTimeout )
+    clearTimeout(boostTimeout)
+  boostSpeed = false
+}
+
+// управление с телефона
+let touchRef = null
+const touchOffset = 20
+let moveTimeout = null
+
+document.ontouchstart = (e) => {
+  const touch = e.touches[0]
+  touchRef = [touch.pageX, touch.pageY]
+}
+
+document.ontouchmove = (e) => {
+  e.preventDefault();
+
+  const touch = e.touches[0]
+  const delta = [touch.pageX - touchRef[0], touch.pageY - touchRef[1]]
+
+  if ( Math.max(Math.abs(delta[0]), Math.abs(delta[1])) < touchOffset )
+    return
+  
+  touchRef = [touch.pageX, touch.pageY]
+
+  clearTimeout(moveTimeout)
+  moveTimeout = setTimeout( () => {
+    let direction = null
+    // Side
+    if ( Math.abs(delta[0]) > Math.abs(delta[1]) ){
+      direction = [Math.sign(delta[0]),0]
+    }
+    else {
+      direction = [0, Math.sign(delta[1])]
+    }
+
+    if ( JSON.stringify(directionQueue[directionQueue.length - 1]) === JSON.stringify(direction) )
+      return
+    
+    directionQueue.push(direction)
+  }, 20)
 }
 
 start()
