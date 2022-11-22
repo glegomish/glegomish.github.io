@@ -5,7 +5,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    
+
     <style>
       * {
         margin: 0;
@@ -13,25 +13,42 @@
         box-sizing: border-box;
         font-family: 'Courier New', Courier, monospace;
       }
+
+      body{
+        overflow: hidden;
+      }
+
       #game{
-        width: calc(var(--cols-num) * var(--pixel-size) + 4px);
+        /* width: calc(var(--cols-num) * var(--pixel-size) + 4px); */
+
+        width: 100%;
+        max-width: calc(var(--cols-num) * 15px);
+        min-width: calc(var(--cols-num) * 5px);
+
         margin: 3rem auto;
         position: relative;
+        padding: 1rem;
       }
       #canvas{
-        width: calc(var(--cols-num) * var(--pixel-size));
-        height: calc(var(--rows-num) * var(--pixel-size));
-        display: flex;
+        width: 100%;
+
+        /* display: flex; */
         flex-wrap: wrap;
         border: 2px solid #777;
-        box-sizing: content-box;
+        box-sizing: border-box;
+
+
+        display: grid;
+        grid-template-columns: repeat(var(--cols-num), minmax(0, 1fr));
       }
       .pixel{
-        width: var(--pixel-size);
-        height: var(--pixel-size);
+        
+        /* width: var(--pixel-size); */
+        /* height: var(--pixel-size); */
         border: 1px solid rgba(0,0,0,0.05);
-        flex: none;
+        /* flex: none; */
         /* transition: all 0.15s; */
+        aspect-ratio: 1;
       }
       .snake{
         background-color: black;
